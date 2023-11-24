@@ -1,2 +1,8 @@
 fastapi==0.68.0
 uvicorn==0.12.2
+httpx
+python-dotenv
+# pandas
+scikit-learn
+textblob
+spotipy

@@ -6,7 +6,7 @@ from pydantic import AnyHttpUrl, BaseSettings, validator
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str
+    PROJECT_NAME: str="RS_SPOTIFY_MUSIC"
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)

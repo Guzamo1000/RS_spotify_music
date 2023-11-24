@@ -8,8 +8,8 @@ from httpx import AsyncClient
 from app.rs.utilis import model
 from app.rs.utilis import extrac_future
 load_dotenv()
-data_song=pd.read_csv("/home/hau/Desktop/RS_spotify/API_RS_spotify/rs_sprotify_music/data/allsong_data.csv")
-feature_song=pd.read_csv("/home/hau/Desktop/RS_spotify/API_RS_spotify/rs_sprotify_music/data/complete_feature.csv")
+data_song=pd.read_csv("data/allsong_data.csv")
+feature_song=pd.read_csv("data/complete_feature.csv")
 CLIENT_ID=os.getenv("CLIENT_ID")
 CLIENT_SECRET=os.getenv("CLIENT_SECRET")
 REDIRECT_URI="localhost:8000/token"
