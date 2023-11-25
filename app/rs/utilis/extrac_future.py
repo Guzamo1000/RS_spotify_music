@@ -5,8 +5,8 @@ import pandas as pd
 from dotenv import load_dotenv
 load_dotenv()
 import os
-client_id=os.getenv("CLIENT_ID")
-client_secret=os.getenv("CLIENT_SECRET")
+client_id="242733b51aa847d7a2e3ae82ab9e54b9"
+client_secret="109b60f0a5914444bfedecde1d0d198b"
 def extract(URL):
 
 

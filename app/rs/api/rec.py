@@ -6,12 +6,13 @@ import httpx
 import pandas as pd
 from httpx import AsyncClient
 from app.rs.utilis import model
+from app.rs import models
 from app.rs.utilis import extrac_future
 load_dotenv()
 data_song=pd.read_csv("data/allsong_data.csv")
-feature_song=pd.read_csv("data/complete_feature.csv")
-CLIENT_ID=os.getenv("CLIENT_ID")
-CLIENT_SECRET=os.getenv("CLIENT_SECRET")
+feature_song=pd.read_csv("data/feature_song.csv")
+CLIENT_ID="242733b51aa847d7a2e3ae82ab9e54b9"
+CLIENT_SECRET="109b60f0a5914444bfedecde1d0d198b"
 REDIRECT_URI="localhost:8000/token"
 oauth2_schema=OAuth2PasswordBearer(tokenUrl="token")
 
@@ -46,12 +47,16 @@ async def play_track(track_id: str):
 
 @router.get("/result")
 async def home(url_track: str,number_of_rec:int):
+    """
+    get music recommend for feature in data set
+    """
     type_url=url_track.split("/")
     if type_url[3]=="track":
         df=extrac_future.extract_song(url_track)
     else:
         df=extrac_future.extract(url_track)
-    music_recomment = model.recommend_from_playlist(data_song, feature_song, df)
+    print(f"df: {df}")
+    music_recomment = models.recommend_from_playlist(type_url,data_song, feature_song, df)
     # print(f"edm: {edm_top40['track_pop']}")
     # number_of_recs = int(request.form['number-of-recs'])
     my_songs = []
@@ -59,8 +64,9 @@ async def home(url_track: str,number_of_rec:int):
     if music_recomment is None: 
         # return render_template("results.html",songs=None)
         return {'status': "false", "mess":"song or playlist is not get feature"}
-    print(f"music_recomment: {music_recomment}")
-    for i in range(number_of_rec):
+    print(f"music_recomment: \n{music_recomment}")
+    len_playlist=min(number_of_rec, len(music_recomment))
+    for i in range(len_playlist):
         
         my_songs.append([str(music_recomment.iloc[i,2]) + ' - '+ '"'+str(music_recomment.iloc[i,0])+'"', "https://open.spotify.com/track/"+ str(music_recomment.iloc[i,2]).split("/")[-1]])
     return {"song": my_songs}

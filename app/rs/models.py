@@ -27,23 +27,23 @@ def generate_playlist_feature(URL,complete_feature_set, playlist_df):
     # Find song features in the playlist
     complete_feature_set_playlist = complete_feature_set[complete_feature_set['id'].isin(playlist_df['id'].values)]
     # Find all non-playlist song features
-        
-    if complete_feature_set_playlist.empty==True:
-        client_id=os.getenv("CLIENT_ID")
-        client_secret=os.getenv("CLIENT_SECRET")
+    print(f"complete_feature_set_playlist: {complete_feature_set_playlist}")
+    # if complete_feature_set_playlist.empty==True:
+    #     client_id="242733b51aa847d7a2e3ae82ab9e54b9"
+    #     client_secret="109b60f0a5914444bfedecde1d0d198b"
 
-        #use the clint secret and id details
-        client_credentials_manager = SpotifyClientCredentials(client_id=client_id,client_secret=client_secret)
-        sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-        playlist_id = URL.split("/")[4].split("?")[0]
-        playlist_tracks_data = sp.playlist_tracks(playlist_id)
+    #     #use the clint secret and id details
+    #     client_credentials_manager = SpotifyClientCredentials(client_id=client_id,client_secret=client_secret)
+    #     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    #     playlist_id = URL.split("/")[4].split("?")[0]
+    #     playlist_tracks_data = sp.playlist_tracks(playlist_id)
 
-        playlist_tracks_id = []
-        for track in playlist_tracks_data['items']:
-            playlist_tracks_id.append(track['track']['id'])
-        features = sp.audio_features(playlist_tracks_id)
-        complete_feature_set_playlist = pd.DataFrame(data=features, columns=features[0].keys())
-        complete_feature_set_playlist=complete_feature_set_playlist[['danceability','energy','loudness','speechiness','acousticness','instrumentalness','liveness','valence','tempo','key','mode','duration_ms','id']]
+    #     playlist_tracks_id = []
+    #     for track in playlist_tracks_data['items']:
+    #         playlist_tracks_id.append(track['track']['id'])
+    #     features = sp.audio_features(playlist_tracks_id)
+    #     complete_feature_set_playlist = pd.DataFrame(data=features, columns=features[0].keys())
+    #     complete_feature_set_playlist=complete_feature_set_playlist[['danceability','energy','loudness','speechiness','acousticness','instrumentalness','liveness','valence','tempo','key','mode','duration_ms','id']]
     complete_feature_set_nonplaylist = complete_feature_set[~complete_feature_set['id'].isin(playlist_df['id'].values)]
     complete_feature_set_playlist_final = complete_feature_set_playlist.drop(columns = "id")    
     return complete_feature_set_playlist_final.sum(axis = 0), complete_feature_set_nonplaylist
@@ -70,7 +70,7 @@ def recommend_from_playlist(URL,songDF,complete_feature_set,playlistDF_test):
 
     # Find feature
     complete_feature_set_playlist_vector, complete_feature_set_nonplaylist = generate_playlist_feature(URL,complete_feature_set, playlistDF_test)
-    
+    print("hehe")
     # Generate recommendation
     top40 = generate_playlist_recos(songDF, complete_feature_set_playlist_vector, complete_feature_set_nonplaylist)
 
